@@ -12,8 +12,8 @@ async function getContact(contactId) {
 }
 
 getContact(1).then((contact) => {
-  contact.id = "1234"
-  contact.birthDate = "12/12/1990";
+  contact.id = 1234
+  contact.birthDate = new Date("12/12/1990");
 });
 
 getContact("2").then((contact) => {

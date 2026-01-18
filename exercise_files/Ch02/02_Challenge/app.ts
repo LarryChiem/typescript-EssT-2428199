@@ -37,7 +37,11 @@ function addTodoItem(todo: string): ToDo {
     return newTodo
 }
 
+// T extends { id: number }
+// This puts a constraint on T. “Whatever T is, it MUST have an id property that is a number.”
 function getNextId<T extends { id: number }>(items: T[]): number {
+    // reduce loops through the array and keeps a running value.
+    // After reduce finishes, max === 3. Then 3 + 1.
     return items.reduce((max, x) => x.id > max ? x.id : max, 0) + 1
 }
 

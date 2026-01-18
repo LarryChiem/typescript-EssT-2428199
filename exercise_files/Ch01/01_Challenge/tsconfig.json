@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "target": "esnext", // TypeScript will emit code that is compatible with the latest version of JavaScript.
+        "outDir": "dist",
+    },
+    "include": [
+        "*.ts"
+    ]
+
+}

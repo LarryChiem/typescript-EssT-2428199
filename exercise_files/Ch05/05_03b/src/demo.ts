@@ -13,15 +13,22 @@ const currentUser = {
     }
 }
 
-function authorize(target: any, property: string, descriptor: PropertyDescriptor) {
-    const wrapped = descriptor.value
+// To pass in a custom parameter (such as which role we expect the user to have), we can wrap the decorator definition in another function, called a decorator factory.
+// function authorize(target: any, property: string, descriptor: PropertyDescriptor) {
+function authorize(role: string) {
+    return function authorize(target: any, property: string, descriptor: PropertyDescriptor) {
+        const wrapped = descriptor.value
 
-    descriptor.value = function () {
-        if (!currentUser.isAuthenticated()) {
-            throw Error("User is not authenticated");
+        descriptor.value = function () {
+            if (!currentUser.isAuthenticated()) {
+                throw Error("User is not authenticated");
+            }
+            if (!currentUser.isInRole(role)) {
+                throw Error(`User not in role ${role}`);
+            }
+
+            return wrapped.apply(this, arguments);
         }
-
-        return wrapped.apply(this, arguments);
     }
 }
 

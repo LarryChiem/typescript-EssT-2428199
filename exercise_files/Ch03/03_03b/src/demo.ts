@@ -16,7 +16,9 @@ interface Contact {
     status?: ContactStatus;
 }
 
-function toContact(nameOrContact) {
+// JS dynamic typing system. nameOrContact is type any.
+// function toContact(nameOrContact) {
+function toContact(nameOrContact: string | Contact): Contact {
     if (typeof nameOrContact === "object") {
         return {
             id: nameOrContact.id,
@@ -32,3 +34,8 @@ function toContact(nameOrContact) {
         }
     }
 }
+
+// 
+const myType = { min: 1, max: 200 }
+
+function save(source: typeof myType) {}

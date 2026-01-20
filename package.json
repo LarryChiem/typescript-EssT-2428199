@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@types/jquery": "^3.5.33"
+    "@types/jquery": "^3.5.33",
+    "reflect-metadata": "^0.2.2"
   }
 }

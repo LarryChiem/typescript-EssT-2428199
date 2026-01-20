@@ -30,8 +30,34 @@ function authorize(role: string) {
     }
 }
 
+function freeze(constructor: Function) {
+    Object.freeze(constructor)
+    Object.freeze(constructor.prototype)
+}
+
+function singleton<T extends {new(...args: any[]): {} }>(constructor: T) {
+    return class Singleton extends constructor {
+        static _instance = null;
+
+        // ...args - spread operator
+        constructor(...args) {
+            super(...args); // pass to base constructor
+            if (Singleton._instance)
+            {
+                throw Error("Duplicate instance")
+            }
+
+            Singleton._instance = this
+        }
+    }
+}
+
+@freeze
+@singleton
 class ContactRepository {
     private contacts: Contact[] = [];
+
+
 
     @authorize("ContactViewer")
     getContactById(id: number): Contact | null {

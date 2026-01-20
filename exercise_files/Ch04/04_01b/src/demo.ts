@@ -19,6 +19,7 @@ interface Contact {
     name: string;
     status: ContactStatus;
     address: Address;
+    email?: string;
 }
 
 interface Query {
@@ -26,7 +27,29 @@ interface Query {
     matches(val): boolean;
 }
 
-type ContactQuery = Record<keyof Contact, Query>
+// type ContactQuery = Record<keyof Contact, Query>
+// This fixes the issue below
+// type ContactQuery = Partial<Record<keyof Contact, Query>>
+
+// What if we want to exclud certain properties? Use Omit
+// type ContactQuery = Omit<
+//     Partial<
+//         Record<keyof Contact, Query>
+//     >,
+//     "address" | "status"
+// >
+
+// What if we want to only allow querying the name and id? Use Pick
+type ContactQuery = 
+    Partial<
+        Pick<
+            Record<keyof Contact, Query>,
+            "id" | "name"
+        > 
+    >
+
+// Now, the same properties of ContactQuery are required instead of optional.
+type RequiredContactQuery = Required<ContactQuery>
 
 function searchContacts(contacts: Contact[], query: ContactQuery) {
     return contacts.filter(contact => {

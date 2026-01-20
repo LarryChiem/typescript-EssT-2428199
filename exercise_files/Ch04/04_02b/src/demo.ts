@@ -14,18 +14,25 @@ interface Contact {
     email: string;
 }
 
-interface Query {
+interface Query<TProp> {
     sort?: 'asc' | 'desc';
-    matches(val): boolean;
+    matches(val: TProp): boolean;
 }
 
-type ContactQuery = Partial<Record<keyof Contact, Query>>;
+// instead of this way, lets use a mapped type
+// type ContactQuery = Partial<Record<keyof Contact, Query>>;
+
+// This mapped type definition uses a property indexer syntax. The open and close brackets,
+// in conjunction with the keyof syntax, in order to enumerate all of the keys of the Contact type.
+type ContactQuery = {
+    [TProp in keyof Contact]?: Query<Contact[TProp]>
+}
 
 function searchContacts(contacts: Contact[], query: ContactQuery) {
     return contacts.filter(contact => {
         for (const property of Object.keys(contact) as (keyof Contact)[]) {
             // get the query object for this property
-            const propertyQuery = query[property];
+            const propertyQuery = query[property] as Query<Contact[keyof Contact]>;
             // check to see if it matches
             if (propertyQuery && propertyQuery.matches(contact[property])) {
                 return true;
